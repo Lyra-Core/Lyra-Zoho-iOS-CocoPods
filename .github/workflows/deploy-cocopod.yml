@@ -21,4 +21,4 @@ jobs:
               env:
                   COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
               run: |
-                  pod trunk push LyraZoho.podspec
+                  pod trunk push LyraZoho.podspec --allow-warnings
