@@ -118,6 +118,14 @@ public final class LyraZoho: Sendable {
         }
         return response
     }
+    
+    public func processNotificationwithInfo(info: [AnyHashable: Any]?) throws(InitializationError) {
+        let notificationClient = NotificationClient.shared.withLock({ notification in
+            return notification
+        })
+        
+        try notificationClient.processNotificationWithInfo(info: info)
+    }
 
     // Department Functionality
     public func getAllDepartments() -> [Department] {

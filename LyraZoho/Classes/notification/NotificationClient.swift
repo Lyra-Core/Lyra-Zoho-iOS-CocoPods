@@ -171,5 +171,40 @@ final class NotificationClient {
             return nil
         }
     }
+    
+    public func processNotificationWithInfo(info: [AnyHashable: Any]?) throws(InitializationError) {
+        do throws(InitializationError) {
+            let isSDKInitialized = CoreInitializer.shared.withLock({ core in
+                return core.isInitialized()
+            })
+            if !isSDKInitialized {
+                throw .sdkUninitialized
+            }
+
+            let isZohoSDKInitialized = CoreInitializer.shared.withLock({ core in
+                return core.isZohoInitialized()
+            })
+            if !isZohoSDKInitialized {
+                throw .zohoSDKUninitialized
+            }
+
+            ZohoSalesIQ.processNotificationWithInfo(info)            
+
+        } catch InitializationError.sdkUninitialized {
+            throw .sdkUninitialized
+        } catch {
+
+            guard
+                let exceptionHandlingCallback = CoreInitializer.shared.withLock({ core in
+                    return core.getExceptionHandlingCallback()
+                })
+            else { return }
+
+            exceptionHandlingCallback.onException(
+                error: ExceptionEvent(
+                    exception: error.localizedDescription,
+                    exceptionLocation: ExceptionLocation.NOTIFICATION_ENABLE_PUSH))
+        }
+    }
 
 }
