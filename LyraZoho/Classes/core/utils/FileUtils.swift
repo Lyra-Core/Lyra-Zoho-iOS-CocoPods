@@ -2,7 +2,7 @@ import Synchronization
 import Foundation
 
 final class FileUtils {
-    static let shared = Mutex<FileUtils>(FileUtils())
+    static let shared = FileUtils()
     
     func getFile(named: String, extensioned: String) -> String? {
         let myBundle = Bundle(for: Self.self)

@@ -21,7 +21,7 @@ struct ContentView: View {
                 .foregroundStyle(.tint)
             Text("Hello, world!")
             Button("Open Zoho Chat") {
-                let lyraShare = LyraZoho.shared.withLock({ share in return share })
+                let lyraShare = LyraZoho.shared
                 
                 do throws (InitializationError) {
                     try lyraShare.openChat()
@@ -34,7 +34,7 @@ struct ContentView: View {
                 AlertManager.shared.show("Open Chat Clickeed", title: "Chat")
             }
             Button("Close Zoho Chat") {
-                let lyraShare = LyraZoho.shared.withLock({ share in return share })
+                let lyraShare = LyraZoho.shared
                 
                 do throws (InitializationError) {
                     try lyraShare.endChatSession()
@@ -50,7 +50,7 @@ struct ContentView: View {
             Button("Toggle Language") {
                 isEnglish.toggle()
                 
-                let lyraShare = LyraZoho.shared.withLock({ share in return share })
+                let lyraShare = LyraZoho.shared
                 if isEnglish {
                     do throws(InitializationError) {
                         try lyraShare.setChatLanguage(languageCode: "en")
@@ -73,7 +73,8 @@ struct ContentView: View {
             }
             
             Button("Set Question") {
-                let lyraShare = LyraZoho.shared.withLock({ share in return share })
+                let lyraShare = LyraZoho.shared
+                
                 do throws(InitializationError) {
                     try lyraShare.setChatQuestion()
                     fullText.append("Set chat question")

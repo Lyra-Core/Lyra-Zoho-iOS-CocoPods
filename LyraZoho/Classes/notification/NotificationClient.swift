@@ -2,21 +2,14 @@ import Foundation
 import Mobilisten
 import Synchronization
 
-final class NotificationClient {
-    static let shared = Mutex<NotificationClient>(NotificationClient())
+@MainActor
+final class NotificationClient: Sendable {
+    static let shared = NotificationClient()
 
     func enablePush(token: String, isTestDevice: Bool) throws(InitializationError) {
         do throws(InitializationError) {
-            let isSDKInitialized = CoreInitializer.shared.withLock({ core in
-                return core.isInitialized()
-            })
-            if !isSDKInitialized {
-                throw .sdkUninitialized
-            }
-
-            let isZohoSDKInitialized = CoreInitializer.shared.withLock({ core in
-                return core.isZohoInitialized()
-            })
+            let isZohoSDKInitialized = CoreInitializer.shared.isZohoInitialized()
+            
             if !isZohoSDKInitialized {
                 throw .zohoSDKUninitialized
             }
@@ -26,9 +19,8 @@ final class NotificationClient {
             } catch {
 
                 guard
-                    let exceptionHandlingCallback = CoreInitializer.shared.withLock({ core in
-                        return core.getExceptionHandlingCallback()
-                    })
+                    let exceptionHandlingCallback = CoreInitializer.shared.getExceptionHandlingCallback()
+                    
                 else { return }
 
                 exceptionHandlingCallback.onException(
@@ -42,9 +34,8 @@ final class NotificationClient {
         } catch {
 
             guard
-                let exceptionHandlingCallback = CoreInitializer.shared.withLock({ core in
-                    return core.getExceptionHandlingCallback()
-                })
+                let exceptionHandlingCallback = CoreInitializer.shared.getExceptionHandlingCallback()
+                
             else { return }
 
             exceptionHandlingCallback.onException(
@@ -58,16 +49,8 @@ final class NotificationClient {
         userInfo: [AnyHashable: Any]?, response: String?, actionIdentifier: String?
     ) throws(InitializationError) {
         do throws(InitializationError) {
-            let isSDKInitialized = CoreInitializer.shared.withLock({ core in
-                return core.isInitialized()
-            })
-            if !isSDKInitialized {
-                throw .sdkUninitialized
-            }
-
-            let isZohoSDKInitialized = CoreInitializer.shared.withLock({ core in
-                return core.isZohoInitialized()
-            })
+            let isZohoSDKInitialized = CoreInitializer.shared.isZohoInitialized()
+            
             if !isZohoSDKInitialized {
                 throw .zohoSDKUninitialized
             }
@@ -93,9 +76,8 @@ final class NotificationClient {
             } catch {
 
                 guard
-                    let exceptionHandlingCallback = CoreInitializer.shared.withLock({ core in
-                        return core.getExceptionHandlingCallback()
-                    })
+                    let exceptionHandlingCallback = CoreInitializer.shared.getExceptionHandlingCallback()
+                    
                 else { return }
 
                 exceptionHandlingCallback.onException(
@@ -108,9 +90,8 @@ final class NotificationClient {
         } catch {
 
             guard
-                let exceptionHandlingCallback = CoreInitializer.shared.withLock({ core in
-                    return core.getExceptionHandlingCallback()
-                })
+                let exceptionHandlingCallback = CoreInitializer.shared.getExceptionHandlingCallback()
+                
             else { return }
 
             exceptionHandlingCallback.onException(
@@ -124,16 +105,8 @@ final class NotificationClient {
         throws(InitializationError) -> Bool?
     {
         do throws(InitializationError) {
-            let isSDKInitialized = CoreInitializer.shared.withLock({ core in
-                return core.isInitialized()
-            })
-            if !isSDKInitialized {
-                throw .sdkUninitialized
-            }
-
-            let isZohoSDKInitialized = CoreInitializer.shared.withLock({ core in
-                return core.isZohoInitialized()
-            })
+            let isZohoSDKInitialized = CoreInitializer.shared.isZohoInitialized()
+            
             if !isZohoSDKInitialized {
                 throw .zohoSDKUninitialized
             }
@@ -142,9 +115,8 @@ final class NotificationClient {
             } catch {
 
                 guard
-                    let exceptionHandlingCallback = CoreInitializer.shared.withLock({ core in
-                        return core.getExceptionHandlingCallback()
-                    })
+                    let exceptionHandlingCallback = CoreInitializer.shared.getExceptionHandlingCallback()
+                    
                 else { return nil }
 
                 exceptionHandlingCallback.onException(
@@ -158,9 +130,8 @@ final class NotificationClient {
         } catch {
 
             guard
-                let exceptionHandlingCallback = CoreInitializer.shared.withLock({ core in
-                    return core.getExceptionHandlingCallback()
-                })
+                let exceptionHandlingCallback = CoreInitializer.shared.getExceptionHandlingCallback()
+                
             else { return nil }
 
             exceptionHandlingCallback.onException(
@@ -174,16 +145,8 @@ final class NotificationClient {
     
     public func processNotificationWithInfo(info: [AnyHashable: Any]?) throws(InitializationError) {
         do throws(InitializationError) {
-            let isSDKInitialized = CoreInitializer.shared.withLock({ core in
-                return core.isInitialized()
-            })
-            if !isSDKInitialized {
-                throw .sdkUninitialized
-            }
-
-            let isZohoSDKInitialized = CoreInitializer.shared.withLock({ core in
-                return core.isZohoInitialized()
-            })
+            let isZohoSDKInitialized = CoreInitializer.shared.isZohoInitialized()
+            
             if !isZohoSDKInitialized {
                 throw .zohoSDKUninitialized
             }
@@ -195,9 +158,8 @@ final class NotificationClient {
         } catch {
 
             guard
-                let exceptionHandlingCallback = CoreInitializer.shared.withLock({ core in
-                    return core.getExceptionHandlingCallback()
-                })
+                let exceptionHandlingCallback = CoreInitializer.shared.getExceptionHandlingCallback()
+                
             else { return }
 
             exceptionHandlingCallback.onException(

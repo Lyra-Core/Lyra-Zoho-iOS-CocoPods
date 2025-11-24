@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'LyraZoho'
-  s.version          = '1.2.2'
+  s.version          = '1.2.3'
   s.summary          = 'LyraZoho is an sdk that integrates Lyra with Zoho CRM.'
 
   s.homepage         = 'https://github.com/Lyra-Core/Lyra-Zoho-iOS-CocoPods'
@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'https://github.com/Lyra-Core/Lyra-Zoho-iOS-CocoPods.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
-  s.ios.deployment_target = '18.0'
+  s.ios.deployment_target = '17.0'
 
   s.source_files = 'LyraZoho/Classes/**/*'
   s.dependency 'Mobilisten', '~> 10.1.6'

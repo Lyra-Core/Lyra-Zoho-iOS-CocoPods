@@ -1,26 +1,17 @@
 import Mobilisten
 import Synchronization
 
+@MainActor
 final class CoreInitializer {
-    static let shared = Mutex<CoreInitializer>(CoreInitializer())
+    static let shared = CoreInitializer()
     
-    private let initialized = Mutex<Bool>(false)
-    private let zohoInitialized = Mutex<Bool>(false)
-    private var apiKey: Optional<String> = nil
-    private var config: Optional<LyraConfig> = nil
+    private var zohoInitialized = false
     private var zohoAppKey: Optional<String> = nil
     private var zohoAccessKey: Optional<String> = nil
     private var exceptionHandlingCallback: Optional<ExceptionHandlingCallback> = nil
     
     private init() {}
     
-    func initialize(config: LyraConfig) {
-        if !initialized.withLock({ initialized in return initialized }) {
-            self.config = config
-            self.apiKey = config.apiKey
-            initialized.withLock({ initialized in initialized = true })
-        }
-    }
     
     func initializeZoho(zohoConfig: ZohoConfig) {
         do throws(any Error) {
@@ -31,7 +22,7 @@ final class CoreInitializer {
                     if error == nil {
                         self.zohoAppKey = zohoConfig.appKey
                         self.zohoAccessKey = zohoConfig.accessKey
-                        self.zohoInitialized.withLock({ initialized in initialized = true })
+                        self.zohoInitialized = true
                     } else {
                         guard let errorCode = error?.code else { throw InitializationError.noErrorCode }
                         guard let errorMessage = error?.message else { throw InitializationError.noErrorMessage(errorCode) }
@@ -56,20 +47,8 @@ final class CoreInitializer {
         }
     }
     
-    func isInitialized() -> Bool {
-        self.initialized.withLock({ initialized in return initialized })
-    }
-    
     func isZohoInitialized() -> Bool {
-        self.zohoInitialized.withLock({ initialized in return initialized })
-    }
-    
-    func getApiKey() -> Optional<String> {
-        return self.apiKey
-    }
-    
-    func getConfig() -> Optional<LyraConfig> {
-        return self.config
+        return self.zohoInitialized
     }
     
     func getZohoAppKey() -> Optional<String> {

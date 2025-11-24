@@ -1,17 +1,13 @@
 import Synchronization
 import Foundation
 
-final class DepartmentClient {
-    static let shared = Mutex<DepartmentClient>(DepartmentClient())
+@MainActor
+final class DepartmentClient: Sendable {
+    static let shared = DepartmentClient()
     
     func getAllDepartments() -> [Department] {
         do throws (InitializationError) {
-            let isSDKInitialized = CoreInitializer.shared.withLock({ core in  return core.isInitialized() })
-            if !isSDKInitialized {
-                throw .sdkUninitialized
-            }
-            
-            let fileUtils = FileUtils.shared.withLock({ fileUtils in return fileUtils })
+            let fileUtils = FileUtils.shared
             
             guard let file = fileUtils.getFile(named: "departments", extensioned: "json") else { return [] }
             
@@ -23,7 +19,7 @@ final class DepartmentClient {
                 return departments
             } catch {
                 
-                guard let exceptionHandlingCallback = CoreInitializer.shared.withLock({ core in  return core.getExceptionHandlingCallback() }) else {
+                guard let exceptionHandlingCallback = CoreInitializer.shared.getExceptionHandlingCallback() else {
                     return []
                 }
                 exceptionHandlingCallback.onException(error: ExceptionEvent(exception: error.localizedDescription, exceptionLocation: ExceptionLocation.DEPARTMENT_GET_ALL))
@@ -33,7 +29,7 @@ final class DepartmentClient {
         } catch InitializationError.sdkUninitialized {
             return []
         } catch {
-            guard let exceptionHandlingCallback = CoreInitializer.shared.withLock({ core in  return core.getExceptionHandlingCallback() }) else {
+            guard let exceptionHandlingCallback = CoreInitializer.shared.getExceptionHandlingCallback() else {
                 return []
             }
             exceptionHandlingCallback.onException(error: ExceptionEvent(exception: error.localizedDescription, exceptionLocation: ExceptionLocation.DEPARTMENT_GET_ALL))
@@ -45,11 +41,7 @@ final class DepartmentClient {
     
     func getDefaultDepartment() -> Department? {
         do throws(InitializationError) {
-            let isSDKInitialized = CoreInitializer.shared.withLock({ core in return core.isInitialized() })
-            if !isSDKInitialized {
-                throw .sdkUninitialized
-            }
-            let fileUtils = FileUtils.shared.withLock({ fileUtils in return fileUtils })
+            let fileUtils = FileUtils.shared
             
             guard let file = fileUtils.getFile(named: "departments", extensioned: "json") else { return nil }
             
@@ -59,7 +51,7 @@ final class DepartmentClient {
                 return departments.first(where: { $0.default })
             } catch {
                 
-                guard let exceptionHandlingCallback = CoreInitializer.shared.withLock({ core in  return core.getExceptionHandlingCallback() }) else {
+                guard let exceptionHandlingCallback = CoreInitializer.shared.getExceptionHandlingCallback() else {
                     return nil
                 }
                 exceptionHandlingCallback.onException(error: ExceptionEvent(exception: error.localizedDescription, exceptionLocation: ExceptionLocation.DEPARTMENT_GET_DEFAULT))
@@ -69,7 +61,7 @@ final class DepartmentClient {
         } catch InitializationError.sdkUninitialized {
             return nil
         } catch {
-            guard let exceptionHandlingCallback = CoreInitializer.shared.withLock({ core in  return core.getExceptionHandlingCallback() }) else {
+            guard let exceptionHandlingCallback = CoreInitializer.shared.getExceptionHandlingCallback() else {
                 return nil
             }
             exceptionHandlingCallback.onException(error: ExceptionEvent(exception: error.localizedDescription, exceptionLocation: ExceptionLocation.DEPARTMENT_GET_DEFAULT))
@@ -80,11 +72,7 @@ final class DepartmentClient {
     
     func getDepartmentsByCountry(countryCode: String) -> Optional<Department> {
         do throws (InitializationError) {
-            let isSDKInitialized = CoreInitializer.shared.withLock({ core in  return core.isInitialized() })
-            if !isSDKInitialized {
-                throw .sdkUninitialized
-            }
-            let fileUtils = FileUtils.shared.withLock({ fileUtils in return fileUtils })
+            let fileUtils = FileUtils.shared
             
             guard let file = fileUtils.getFile(named: "departments", extensioned: "json") else { return nil }
             
@@ -96,7 +84,7 @@ final class DepartmentClient {
                 return departments.first{ $0.codes.contains(countryCode)}
             } catch {
                 
-                guard let exceptionHandlingCallback = CoreInitializer.shared.withLock({ core in  return core.getExceptionHandlingCallback() }) else {
+                guard let exceptionHandlingCallback = CoreInitializer.shared.getExceptionHandlingCallback() else {
                     return nil
                 }
                 exceptionHandlingCallback.onException(error: ExceptionEvent(exception: error.localizedDescription, exceptionLocation: ExceptionLocation.DEPARTMENT_GET_BY_COUNTRY))
@@ -106,7 +94,7 @@ final class DepartmentClient {
         } catch InitializationError.sdkUninitialized {
             return nil
         } catch {
-            guard let exceptionHandlingCallback = CoreInitializer.shared.withLock({ core in  return core.getExceptionHandlingCallback() }) else {
+            guard let exceptionHandlingCallback = CoreInitializer.shared.getExceptionHandlingCallback() else {
                 return nil
             }
             exceptionHandlingCallback.onException(error: ExceptionEvent(exception: error.localizedDescription, exceptionLocation: ExceptionLocation.DEPARTMENT_GET_BY_COUNTRY))

@@ -17,15 +17,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        let lyraShare = LyraZoho.shared.withLock({ share in return share })
-        let apiKey = ProcessInfo.processInfo.environment["LYRA_API_KEY"] ?? ""
+        let lyraShare = LyraZoho.shared
         let appKey = ProcessInfo.processInfo.environment["ZOHO_APP_KEY"] ?? ""
         let accessKey = ProcessInfo.processInfo.environment["ZOHO_ACCESS_KEY"] ?? ""
-        let lyraConfig = LyraConfig(apiKey: apiKey)
+        
         let zohoConfig = ZohoConfig(appKey: appKey, accessKey: accessKey, exceptionHandlingCallback: ExcpetionHandlingCallbackImplementation())
        
         
-        lyraShare.initialize(config: lyraConfig, zohoConfig: zohoConfig)
+        lyraShare.initialize(zohoConfig: zohoConfig)
         return true
     }
 
