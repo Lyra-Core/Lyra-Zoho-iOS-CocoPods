@@ -15,4 +15,5 @@ public enum ExceptionLocation {
     case DEPARTMENT_GET_ALL
     case DEPARTMENT_GET_DEFAULT
     case DEPARTMENT_GET_BY_COUNTRY
+    case CORE_SET_ENVIRONMENT
 }

@@ -9,6 +9,7 @@ final class CoreInitializer {
     private var zohoAppKey: Optional<String> = nil
     private var zohoAccessKey: Optional<String> = nil
     private var exceptionHandlingCallback: Optional<ExceptionHandlingCallback> = nil
+    private var environment: Environment = .PRODUCTION
     
     private init() {}
     
@@ -47,6 +48,22 @@ final class CoreInitializer {
         }
     }
     
+    func setEnvironment(environment: Environment) throws (InitializationError) {
+        do throws (InitializationError) {
+            let isZohoSDKInitialized = CoreInitializer.shared.isZohoInitialized()
+            if !isZohoSDKInitialized {
+                throw .zohoSDKUninitialized
+            }
+            self.environment = environment
+            FileUtils.shared.clearDepartmentCache()
+        } catch {
+            
+            guard let exceptionHandlingCallback = CoreInitializer.shared.getExceptionHandlingCallback() else { return }
+            
+            exceptionHandlingCallback.onException(error: ExceptionEvent(exception: error.localizedDescription, exceptionLocation: ExceptionLocation.CORE_SET_ENVIRONMENT))
+        }
+    }
+    
     func isZohoInitialized() -> Bool {
         return self.zohoInitialized
     }
@@ -61,5 +78,9 @@ final class CoreInitializer {
     
     func getExceptionHandlingCallback() -> Optional<ExceptionHandlingCallback> {
         return self.exceptionHandlingCallback
+    }
+    
+    func getEnvironment() -> Environment {
+        return self.environment
     }
 }

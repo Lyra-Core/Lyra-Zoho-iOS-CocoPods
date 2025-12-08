@@ -13,6 +13,21 @@ public final class LyraZoho: Sendable {
 
         coreInitializer.initializeZoho(zohoConfig: zohoConfig)
     }
+        
+    /*
+     This function sets what environment the SDK is running in. The default is Production.
+     
+     - Parameters:
+        - environment: Can be either .STAGING or .PRODUCTION
+     
+     - Throws: InitializationError
+     
+     */
+    public func setEnvironment(environment: Environment) throws(InitializationError) {
+        let coreInitializer = CoreInitializer.shared
+        
+        try coreInitializer.setEnvironment(environment: environment)
+    }
 
     public func isZohoInitialized() -> Bool {
         let coreInitializer = CoreInitializer.shared
@@ -31,9 +46,9 @@ public final class LyraZoho: Sendable {
         try chatClient.open()
     }
 
-    public func setChatDepartment(countryCode: String) throws(InitializationError) {
+    public func setChatDepartment(countryCode: String) async throws(InitializationError) {
         let chatClient = ChatClient.shared
-        try chatClient.setDepartment(countryCode: countryCode)
+        try await chatClient.setDepartment(countryCode: countryCode)
     }
 
     public func setChatLanguage(languageCode: String) throws(InitializationError) {
@@ -104,19 +119,19 @@ public final class LyraZoho: Sendable {
     }
 
     // Department Functionality
-    public func getAllDepartments() -> [Department] {
+    public func getAllDepartments() async -> [Department] {
         let departmentClient = DepartmentClient.shared
-        return departmentClient.getAllDepartments()
+        return await departmentClient.getAllDepartments()
     }
 
-    public func getDefaultDepartment() -> Department? {
+    public func getDefaultDepartment() async -> Department? {
         let departmentClient = DepartmentClient.shared
-        return departmentClient.getDefaultDepartment()
+        return await departmentClient.getDefaultDepartment()
     }
 
-    public func getDepartmentsByCountryCode(countryCode: String) -> Department? {
+    public func getDepartmentsByCountryCode(countryCode: String) async -> Department? {
         let departmentClient = DepartmentClient.shared
-        return departmentClient.getDepartmentsByCountry(countryCode: countryCode)
+        return await departmentClient.getDepartmentsByCountry(countryCode: countryCode)
     }
 
 }

@@ -66,7 +66,7 @@ final class ChatClient: Sendable {
         }
     }
     
-    func setDepartment(countryCode: String) throws (InitializationError) {
+    func setDepartment(countryCode: String) async throws (InitializationError) {
         do throws (InitializationError) {
             let isZohoSDKInitialized = CoreInitializer.shared.isZohoInitialized()
             if !isZohoSDKInitialized {
@@ -74,10 +74,10 @@ final class ChatClient: Sendable {
             }
             
             do throws (DepartmentError) {
-                var department = DepartmentClient.shared.getDepartmentsByCountry(countryCode: countryCode, )
+                var department = await DepartmentClient.shared.getDepartmentsByCountry(countryCode: countryCode)
                 
                 if (department == nil) {
-                    department = DepartmentClient.shared.getDefaultDepartment()
+                    department = await DepartmentClient.shared.getDefaultDepartment()
                     
                     if (department == nil) {
                         throw .notFound

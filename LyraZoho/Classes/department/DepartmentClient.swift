@@ -5,11 +5,11 @@ import Foundation
 final class DepartmentClient: Sendable {
     static let shared = DepartmentClient()
     
-    func getAllDepartments() -> [Department] {
+    func getAllDepartments() async -> [Department] {
         do throws (InitializationError) {
             let fileUtils = FileUtils.shared
             
-            guard let file = fileUtils.getFile(named: "departments", extensioned: "json") else { return [] }
+            guard let file = await fileUtils.getDepartmentFile() else { return [] }
             
             do {
                 
@@ -39,11 +39,11 @@ final class DepartmentClient: Sendable {
         
     }
     
-    func getDefaultDepartment() -> Department? {
+    func getDefaultDepartment() async -> Department? {
         do throws(InitializationError) {
             let fileUtils = FileUtils.shared
             
-            guard let file = fileUtils.getFile(named: "departments", extensioned: "json") else { return nil }
+            guard let file = await fileUtils.getDepartmentFile() else { return nil }
             
             do {
                 let decoder = JSONDecoder()
@@ -70,11 +70,11 @@ final class DepartmentClient: Sendable {
         }
     }
     
-    func getDepartmentsByCountry(countryCode: String) -> Optional<Department> {
+    func getDepartmentsByCountry(countryCode: String) async -> Optional<Department> {
         do throws (InitializationError) {
             let fileUtils = FileUtils.shared
             
-            guard let file = fileUtils.getFile(named: "departments", extensioned: "json") else { return nil }
+            guard let file = await fileUtils.getDepartmentFile() else { return nil }
             
             do {
                 
