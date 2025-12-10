@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'LyraZoho'
-  s.version          = '1.2.4-beta01'
+  s.version          = '1.2.5-beta01'
   s.summary          = 'LyraZoho is an sdk that integrates Lyra with Zoho CRM.'
 
   s.homepage         = 'https://github.com/Lyra-Core/Lyra-Zoho-iOS-CocoPods'
