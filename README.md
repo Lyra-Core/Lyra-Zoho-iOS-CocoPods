@@ -239,4 +239,4 @@ For help, contact <support@lyracore.com>.
 
 ---
 
-*This SDK now provides comprehensive chat functionality that puts your previous "placeholder" implementation to shame.*
+*This SDK now provides comprehensive chat functionality that puts your previous "placeholder" implementation to shame.*2025-12-10: 1.2.7 
